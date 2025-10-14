@@ -1,0 +1,31 @@
+{
+  "name": "pomodoro",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Simple pomodoro web app",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TiberiusGh/pomodoro.git"
+  },
+  "author": "Tiberius Gherac",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TiberiusGh/pomodoro/issues"
+  },
+  "homepage": "https://github.com/TiberiusGh/pomodoro#readme",
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.14",
+    "tailwindcss": "^4.1.14",
+    "typescript": "^5.9.3",
+    "vite": "^6.3.6"
+  },
+  "dependencies": {
+    "consent-tracker": "^3.0.5"
+  }
+}
