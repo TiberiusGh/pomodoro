@@ -1,7 +1,7 @@
 import { InvalidHTMLElementError, InvalidNumberOfMinutes } from './CustomErrors'
 
 export class Validator {
-  validateHtmlElmement(input: any) {
+  validateHtmlElement(input: any) {
     if (!(input instanceof HTMLElement)) {
       throw new InvalidHTMLElementError()
     }
