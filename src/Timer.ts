@@ -1,19 +1,23 @@
 import { Validator } from './Validator'
 
 export class Timer {
-  #minutes: number | null = null
-  #displayHTMLElement: HTMLElement
+  #minutes = 0
+  #seconds = 0
   #timerIntervalID: number | null = null
+  #onUpdateCallback: Function
   #validator = new Validator()
 
-  constructor(displayHTMLElement: HTMLElement) {
-    this.#validator.validateHtmlElmement(displayHTMLElement)
-
-    this.#displayHTMLElement = displayHTMLElement
+  constructor(callbackFunction: Function) {
+    this.#onUpdateCallback = callbackFunction
   }
 
-  start(time: number): void {
-    this.#minutes = time
+  start(minutes: number): void {
+    this.#validator.validateCustomMinutes(minutes)
+
+    this.#minutes = minutes
+
+    this.#onUpdateCallback({ minutes: this.#minutes, seconds: this.#seconds })
+
     this.#timerIntervalID = window.setInterval(() => {
       this.#tick()
     }, 1000)
@@ -27,21 +31,23 @@ export class Timer {
   }
 
   reset(): void {
-    this.#timerIntervalID = 0
-    this.#updateDisplay()
+    this.pause()
+    this.#minutes = 25
+    this.#seconds = 0
+    this.#onUpdateCallback({ minutes: this.#minutes, seconds: this.#seconds })
   }
 
   #tick(): void {
-    this.#minutes--
-    this.#updateDisplay
-
-    if (this.#minutes === 0) {
-      this.pause()
-      alert('Finish!')
+    if (this.#seconds === 0) {
+      if (this.#minutes === 0) {
+        this.pause()
+        return
+      }
+      this.#minutes--
+      this.#seconds = 59
+    } else {
+      this.#seconds--
     }
-  }
-
-  #updateDisplay(): void {
-    this.#displayHTMLElement.textContent = this.#minutes.toString()
+    this.#onUpdateCallback({ minutes: this.#minutes, seconds: this.#seconds })
   }
 }
