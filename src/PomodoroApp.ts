@@ -1,17 +1,16 @@
 import ConsentTracker from 'consent-tracker'
-import { TimerView } from './TimerView'
+import { PomodoroView } from './PomodoroView'
 import { Validator } from './Validator'
 import { ConsentView } from './ConsentView'
+import type { PomodoroTime } from './types'
 
 export class PomodoroApp {
   #htmlContainer
-  #timerView: TimerView
   #validator = new Validator()
   #consentTracker = new ConsentTracker()
 
   constructor(htmlContainer: HTMLElement) {
     this.#validator.validateHtmlElement(htmlContainer)
-    this.#timerView = new TimerView(htmlContainer)
     this.#htmlContainer = htmlContainer
 
     this.#handleViews()
@@ -23,14 +22,13 @@ export class PomodoroApp {
     if (!hasConsents) {
       this.#renderConsentsView()
     } else {
-      this.#renderPomodoro()
+      this.#renderPomodoroView()
     }
   }
 
   #renderConsentsView() {
     const consentView = new ConsentView(this.#htmlContainer)
-    consentView.renderConsentBanner()
-
+    consentView.renderConsentView()
     this.#mapPomodoroConsentsToConsentTracker(consentView)
   }
 
@@ -38,21 +36,30 @@ export class PomodoroApp {
     // The function passed as callback needs to be wrapped into an arrow function to not loose it's context
     viewComponent.onAcceptAllConsents(() => {
       this.#consentTracker.acceptAll()
-      console.log('Accept all')
+      this.#madeConsentChoice(viewComponent)
     })
 
     viewComponent.onAcceptNecessaryConsents(() => {
       this.#consentTracker.uppdateConsent('essential', true)
-      console.log('Necesarry only')
+      this.#madeConsentChoice(viewComponent)
     })
 
     viewComponent.onRejectAllConsents(() => {
       this.#consentTracker.declineAll()
-      console.log('Declined all')
+      this.#madeConsentChoice(viewComponent)
     })
   }
 
-  #renderPomodoro() {
+  #madeConsentChoice(consentView: ConsentView) {
+    consentView.remove()
+    this.#renderPomodoroView()
+  }
+
+  #renderPomodoroView() {
     console.log('RENDERING POMODORO VIEW')
+    const pomodoroView = new PomodoroView(this.#htmlContainer)
+
+    const time: PomodoroTime = { minutes: 12, seconds: 34 }
+    pomodoroView.update(time)
   }
 }
