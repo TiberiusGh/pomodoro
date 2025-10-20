@@ -1,26 +1,43 @@
 import { Validator } from './Validator'
 
 export class Timer {
-  #minutes = 0
-  #seconds = 0
+  #submitedMinutes: number
+  currentMinutes = 0
+  #currentSeconds = 0
   #timerIntervalID: number | null = null
   #onUpdateCallback: Function
   #validator = new Validator()
 
-  constructor(callbackFunction: Function) {
+  constructor(callbackFunction: Function, submitMinutes: number) {
     this.#onUpdateCallback = callbackFunction
+
+    this.#submitedMinutes = submitMinutes
   }
 
   start(minutes: number): void {
+    // So that it can't be called multiple times
+    if (this.#timerIntervalID !== null) {
+      return
+    }
+
     this.#validator.validateCustomMinutes(minutes)
 
-    this.#minutes = minutes
+    this.#submitedMinutes = minutes
 
-    this.#onUpdateCallback({ minutes: this.#minutes, seconds: this.#seconds })
+    this.currentMinutes = minutes
+
+    this.#onUpdateCallback({
+      minutes: this.currentMinutes,
+      seconds: this.#currentSeconds
+    })
 
     this.#timerIntervalID = window.setInterval(() => {
       this.#tick()
     }, 1000)
+  }
+
+  resume() {
+    this.start(this.currentMinutes)
   }
 
   pause(): void {
@@ -32,22 +49,28 @@ export class Timer {
 
   reset(): void {
     this.pause()
-    this.#minutes = 25
-    this.#seconds = 0
-    this.#onUpdateCallback({ minutes: this.#minutes, seconds: this.#seconds })
+    this.currentMinutes = this.#submitedMinutes
+    this.#currentSeconds = 0
+    this.#onUpdateCallback({
+      minutes: this.currentMinutes,
+      seconds: this.#currentSeconds
+    })
   }
 
   #tick(): void {
-    if (this.#seconds === 0) {
-      if (this.#minutes === 0) {
+    if (this.#currentSeconds === 0) {
+      if (this.currentMinutes === 0) {
         this.pause()
         return
       }
-      this.#minutes--
-      this.#seconds = 59
+      this.currentMinutes--
+      this.#currentSeconds = 59
     } else {
-      this.#seconds--
+      this.#currentSeconds--
     }
-    this.#onUpdateCallback({ minutes: this.#minutes, seconds: this.#seconds })
+    this.#onUpdateCallback({
+      minutes: this.currentMinutes,
+      seconds: this.#currentSeconds
+    })
   }
 }
