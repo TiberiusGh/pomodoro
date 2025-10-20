@@ -16,12 +16,11 @@ export class ConsentView {
   #createView(): HTMLElement {
     const template = document.getElementById(
       'pomodoro-consent-view'
-    ) as HTMLElement
+    ) as HTMLTemplateElement
 
-    // Works even if it shows error
-    const templateClone = template.content.cloneNode(true)
+    const templateClone = template.content.cloneNode(true) as DocumentFragment
 
-    return templateClone.firstElementChild
+    return templateClone.firstElementChild as HTMLElement
   }
 
   #attachEventListeners(): void {

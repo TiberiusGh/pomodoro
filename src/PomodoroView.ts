@@ -9,7 +9,6 @@ export class PomodoroView {
   #htmlContainer: HTMLElement
 
   #inputSessionMinutes!: HTMLInputElement
-  #inputPauseMinutes!: HTMLElement
   #submitMinutesButton!: HTMLElement
 
   #timeAndButtonsDiv!: HTMLElement
@@ -47,10 +46,9 @@ export class PomodoroView {
       '#pomodoro-view'
     ) as HTMLTemplateElement
 
-    const templateClone = template.content.cloneNode(true)
+    const templateClone = template.content.cloneNode(true) as DocumentFragment
 
-    // Works even if it shows error
-    return templateClone.firstElementChild
+    return templateClone.firstElementChild as HTMLElement
   }
 
   #selectPomodoroHtmlElements(htmlElement: HTMLElement) {
@@ -126,8 +124,8 @@ export class PomodoroView {
       '#pomodoro-ad-banner'
     ) as HTMLTemplateElement
 
-    const templateClone = template.content.cloneNode(true)
-    return templateClone.firstElementChild
+    const templateClone = template.content.cloneNode(true) as DocumentFragment
+    return templateClone.firstElementChild as HTMLElement
   }
 
   renderPomodoroView() {
