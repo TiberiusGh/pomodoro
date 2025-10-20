@@ -2,7 +2,6 @@ import ConsentTracker from 'consent-tracker'
 import { PomodoroView } from './PomodoroView'
 import { Validator } from './Validator'
 import { ConsentView } from './ConsentView'
-import type { PomodoroTime } from './types'
 
 export class PomodoroApp {
   #htmlContainer
@@ -56,10 +55,7 @@ export class PomodoroApp {
   }
 
   #renderPomodoroView() {
-    console.log('RENDERING POMODORO VIEW')
     const pomodoroView = new PomodoroView(this.#htmlContainer)
-
-    const time: PomodoroTime = { minutes: 12, seconds: 34 }
-    pomodoroView.update(time)
+    pomodoroView.renderPomodoroView()
   }
 }
