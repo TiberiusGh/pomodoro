@@ -1,3 +1,4 @@
+import ConsentTracker from 'consent-tracker'
 import { Validator } from './Validator'
 
 export class Timer {
@@ -7,6 +8,7 @@ export class Timer {
   #timerIntervalID: number | null = null
   #onUpdateCallback: Function
   #validator = new Validator()
+  #consentTracker = new ConsentTracker()
 
   constructor(callbackFunction: Function, submitMinutes: number) {
     this.#onUpdateCallback = callbackFunction
@@ -25,6 +27,8 @@ export class Timer {
     this.#submitedMinutes = minutes
 
     this.currentMinutes = minutes
+
+    this.#handleLocalstorage(minutes)
 
     this.#onUpdateCallback({
       minutes: this.currentMinutes,
@@ -72,5 +76,21 @@ export class Timer {
       minutes: this.currentMinutes,
       seconds: this.#currentSeconds
     })
+  }
+
+  #handleLocalstorage(submitedStudyMinutes: number) {
+    const localstorageAcces = this.#checkLocalstorageAccess()
+
+    if (localstorageAcces) {
+      localStorage.setItem('pomodoroMinutes', submitedStudyMinutes.toString())
+    }
+  }
+
+  #checkLocalstorageAccess() {
+    const userConsents = this.#consentTracker.getConsents()
+
+    if (userConsents) {
+      return userConsents.essential
+    }
   }
 }

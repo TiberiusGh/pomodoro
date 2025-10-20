@@ -149,6 +149,13 @@ export class PomodoroView {
 
   #handleTimeSubmit() {
     const studyMinutes = Number(this.#inputSessionMinutes.value)
+
+    const sessionInput = this.#pomodoroView.querySelector(
+      '#pomodoro-session-input'
+    ) as HTMLElement
+    sessionInput.style.display = 'none'
+    this.#timeAndButtonsDiv.style.display = 'block'
+
     this.#timer.start(studyMinutes)
   }
 
