@@ -3,7 +3,7 @@ import type { PomodoroHtmlElements, PomodoroTime } from './types'
 import { Validator } from './Validator'
 
 export class PomodoroView {
-  #pomodoroView: PomodoroView
+  #pomodoroView: HTMLElement
 
   #htmlContainer: HTMLElement
 
@@ -105,7 +105,29 @@ export class PomodoroView {
   }
 
   #renderPomodoroView() {
+    const storedMinutes = localStorage.getItem('pomodoro-minutes')
+
+    if (storedMinutes) {
+      this.#showPomodoroView(storedMinutes)
+    } else {
+      this.#showInputView()
+    }
+
     this.#htmlContainer.appendChild(this.#pomodoroView)
+  }
+
+  #showPomodoroView(storedMinutes: String) {
+    const sessionInput = this.#pomodoroView.querySelector(
+      '#pomodoro-session-input'
+    ) as HTMLElement
+    sessionInput.style.display = 'none'
+
+    const minutes = Number(storedMinutes)
+    this.#timer.start(minutes)
+  }
+
+  #showInputView() {
+    this.#timeAndButtonsDiv.style.display = 'none'
   }
 
   #attachEventListeners() {
