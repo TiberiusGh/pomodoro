@@ -82,7 +82,7 @@ export class Timer {
     const localstorageAcces = this.#checkLocalstorageAccess()
 
     if (localstorageAcces) {
-      localStorage.setItem('pomodoroMinutes', submitedStudyMinutes.toString())
+      localStorage.setItem('pomodoro-minutes', submitedStudyMinutes.toString())
     }
   }
 
