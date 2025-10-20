@@ -26,6 +26,6 @@
     "vite": "^6.3.6"
   },
   "dependencies": {
-    "consent-tracker": "^3.1.1"
+    "consent-tracker": "^3.1.2"
   }
 }
