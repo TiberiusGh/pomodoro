@@ -1,3 +1,4 @@
+import ConsentTracker from 'consent-tracker'
 import { Timer } from './Timer'
 import type { PomodoroHtmlElements, PomodoroTime } from './types'
 import { Validator } from './Validator'
@@ -18,6 +19,7 @@ export class PomodoroView {
   #resetButton!: HTMLElement
 
   #validator = new Validator()
+  #consentTracker = new ConsentTracker()
 
   #timer!: Timer
 
@@ -29,6 +31,8 @@ export class PomodoroView {
       this.#pomodoroView
     )
 
+    this.#decideAdBannerView()
+
     this.#validateHtmlElements(pomodoroHtmlElements)
 
     this.#assignHtmlElementsToPrivateFields(pomodoroHtmlElements)
@@ -36,8 +40,6 @@ export class PomodoroView {
     this.#attachEventListeners()
 
     this.#initializeTimer()
-
-    this.#renderPomodoroView()
   }
 
   #createView(): HTMLElement {
@@ -104,7 +106,35 @@ export class PomodoroView {
     this.#timeElement.textContent = `${time.minutes}:${time.seconds}`
   }
 
-  #renderPomodoroView() {
+  #decideAdBannerView() {
+    const marketingAgreement = this.#consentTracker.getConsents()
+
+    if (marketingAgreement.marketing) {
+      this.#renderBanner()
+    }
+  }
+
+  #renderBanner() {
+    const bannerHtml = this.#createBanerView()
+    this.#validator.validateHtmlElement(bannerHtml)
+
+    this.#htmlContainer.appendChild(bannerHtml)
+  }
+
+  #createBanerView() {
+    const template = document.querySelector(
+      '#pomodoro-ad-banner'
+    ) as HTMLTemplateElement
+
+    const templateClone = template.content.cloneNode(true)
+    return templateClone.firstElementChild
+  }
+
+  renderPomodoroView() {
+    this.#decideView()
+  }
+
+  #decideView() {
     const storedMinutes = localStorage.getItem('pomodoro-minutes')
 
     if (storedMinutes) {
