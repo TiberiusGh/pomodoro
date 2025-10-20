@@ -187,7 +187,5 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# Custom testing files
-test*
 
 # End of https://www.gitignore.io/api/node,linux,macos,windows,visualstudiocode
