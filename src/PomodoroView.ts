@@ -1,0 +1,140 @@
+import { Timer } from './Timer'
+import type { PomodoroHtmlElements, PomodoroTime } from './types'
+import { Validator } from './Validator'
+
+export class PomodoroView {
+  #pomodoroView: PomodoroView
+
+  #htmlContainer: HTMLElement
+
+  #inputSessionMinutes!: HTMLInputElement
+  #inputPauseMinutes!: HTMLElement
+  #submitMinutesButton!: HTMLElement
+
+  #timeAndButtonsDiv!: HTMLElement
+  #timeElement!: HTMLElement
+  #startButton!: HTMLElement
+  #pauseButton!: HTMLElement
+  #resetButton!: HTMLElement
+
+  #validator = new Validator()
+
+  #timer!: Timer
+
+  constructor(htmlContainer: HTMLElement) {
+    this.#htmlContainer = htmlContainer
+    this.#pomodoroView = this.#createView()
+
+    const pomodoroHtmlElements = this.#selectPomodoroHtmlElements(
+      this.#pomodoroView
+    )
+
+    this.#validateHtmlElements(pomodoroHtmlElements)
+
+    this.#assignHtmlElementsToPrivateFields(pomodoroHtmlElements)
+
+    this.#attachEventListeners()
+
+    this.#initializeTimer()
+
+    this.#renderPomodoroView()
+  }
+
+  #createView(): HTMLElement {
+    const template = document.querySelector(
+      '#pomodoro-view'
+    ) as HTMLTemplateElement
+
+    const templateClone = template.content.cloneNode(true)
+
+    // Works even if it shows error
+    return templateClone.firstElementChild
+  }
+
+  #selectPomodoroHtmlElements(htmlElement: HTMLElement) {
+    const pomodoroHtmlElements: PomodoroHtmlElements = {
+      sessionInput: htmlElement.querySelector(
+        '#pomodoro-session-input'
+      ) as HTMLElement,
+      timeAndButtons: htmlElement.querySelector(
+        '#pomodoro-time-and-buttons'
+      ) as HTMLElement,
+      displayElement: htmlElement.querySelector(
+        '#pomodoro-display-element'
+      ) as HTMLElement,
+      startButton: htmlElement.querySelector(
+        '#pomodoro-startButton-element'
+      ) as HTMLElement,
+      pauseButton: htmlElement.querySelector(
+        '#pomodoro-pauseButton-element'
+      ) as HTMLElement,
+      resetButton: htmlElement.querySelector(
+        '#pomodoro-resetButton-element'
+      ) as HTMLElement,
+      minutesInput: htmlElement.querySelector(
+        '#pomodoro-study-input'
+      ) as HTMLInputElement,
+      submitMinutesButton: htmlElement.querySelector(
+        '#pomodoro-submit-minutes'
+      ) as HTMLButtonElement
+    }
+
+    return pomodoroHtmlElements
+  }
+
+  #validateHtmlElements(htmlElements: PomodoroHtmlElements) {
+    for (const htmlElement of Object.values(htmlElements)) {
+      this.#validator.validateHtmlElement(htmlElement)
+    }
+  }
+
+  #assignHtmlElementsToPrivateFields(
+    pomodoroHtmlElements: PomodoroHtmlElements
+  ) {
+    this.#timeAndButtonsDiv = pomodoroHtmlElements.timeAndButtons
+    this.#timeElement = pomodoroHtmlElements.displayElement
+    this.#startButton = pomodoroHtmlElements.startButton
+    this.#pauseButton = pomodoroHtmlElements.pauseButton
+    this.#resetButton = pomodoroHtmlElements.resetButton
+    this.#inputSessionMinutes = pomodoroHtmlElements.minutesInput
+    this.#submitMinutesButton = pomodoroHtmlElements.submitMinutesButton
+  }
+
+  update(time: PomodoroTime) {
+    this.#timeElement.textContent = `${time.minutes}:${time.seconds}`
+  }
+
+  #renderPomodoroView() {
+    this.#htmlContainer.appendChild(this.#pomodoroView)
+  }
+
+  #attachEventListeners() {
+    this.#submitMinutesButton.addEventListener('click', () => {
+      this.#handleTimeSubmit()
+    })
+    this.#startButton.addEventListener('click', () => {
+      this.#timer.resume()
+    })
+
+    this.#pauseButton.addEventListener('click', () => {
+      this.#timer.pause()
+    })
+
+    this.#resetButton.addEventListener('click', () => {
+      this.#timer.reset()
+    })
+  }
+
+  #handleTimeSubmit() {
+    const studyMinutes = Number(this.#inputSessionMinutes.value)
+    this.#timer.start(studyMinutes)
+  }
+
+  #initializeTimer() {
+    const inputStudyMinutes = Number(this.#inputSessionMinutes.value)
+    this.#timer = new Timer(
+      (time: PomodoroTime) => this.update(time),
+      inputStudyMinutes
+    )
+  }
+}
