@@ -30,13 +30,13 @@ export class PomodoroView {
       this.#pomodoroView
     )
 
-    this.#decideAdBannerView()
-
     this.#validateHtmlElements(pomodoroHtmlElements)
 
     this.#assignHtmlElementsToPrivateFields(pomodoroHtmlElements)
 
     this.#attachEventListeners()
+
+    this.#decideAdBannerView()
 
     this.#initializeTimer()
   }
@@ -104,14 +104,31 @@ export class PomodoroView {
     this.#timeElement.textContent = `${time.minutes}:${time.seconds}`
   }
 
-  #decideAdBannerView() {
-    const marketingAgreement = this.#consentTracker.getConsents()
+  renderPomodoroView(): void {
+    this.#decideView()
+  }
 
-    if (marketingAgreement.marketing) {
+  #decideAdBannerView() {
+    const hasMarketingConsent = this.#checkMarketingConsent()
+
+    if (hasMarketingConsent) {
       this.#renderBanner()
     }
   }
 
+  #checkMarketingConsent(): boolean {
+    try {
+      const agreements = this.#consentTracker.getConsents()
+
+      return this.#hasMarketingAgreement(agreements)
+    } catch (error) {
+      return false
+    }
+  }
+
+  #hasMarketingAgreement(consents: any) {
+    return consents.marketing
+  }
   #renderBanner() {
     const bannerHtml = this.#createBanerView()
     this.#validator.validateHtmlElement(bannerHtml)
@@ -126,10 +143,6 @@ export class PomodoroView {
 
     const templateClone = template.content.cloneNode(true) as DocumentFragment
     return templateClone.firstElementChild as HTMLElement
-  }
-
-  renderPomodoroView() {
-    this.#decideView()
   }
 
   #decideView() {
@@ -178,13 +191,17 @@ export class PomodoroView {
   #handleTimeSubmit() {
     const studyMinutes = Number(this.#inputSessionMinutes.value)
 
+    this.#hideSessionInput()
+
+    this.#timer.start(studyMinutes)
+  }
+
+  #hideSessionInput() {
     const sessionInput = this.#pomodoroView.querySelector(
       '#pomodoro-session-input'
     ) as HTMLElement
     sessionInput.style.display = 'none'
     this.#timeAndButtonsDiv.style.display = 'block'
-
-    this.#timer.start(studyMinutes)
   }
 
   #initializeTimer() {
