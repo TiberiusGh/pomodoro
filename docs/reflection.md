@@ -20,6 +20,9 @@ Acording to Clean Code, the ideal number of arguments in a function is zero **(n
 
 **Small function that do one thing and do it well** is the aim for function according to Clean Code. Writing a front end application in OOP has provided to be significantly more challenging than anticipated. This lead to my methods not allways following those principles. But according to Robert C. Martin, writing a funtion is like writing a paper where one first get it's thoughts down on paper and later change the wording so it reads well. Focus now for my code should be assigned in refactoring methods so that they become **smaller**, **do one thing**, **take int acount the level of abstraction** and **avoid side effects**.
 
+The method responsable with the countdown in Timer.ts file has nested loops which according to Clean Code is a sign that a method does more than one thing. Refactoring this method had lead me to creating lesser readable code and i've choosen to stick with nested if statements since it's easyer to understand.
+![nestedIf](.img/nestedIf.png)
+
 ## Chapter 4. Comments
 
 I do agree with Robert C. Martin in that **comments are often lying**. My poor current knowledge in programming leads me to refactoring of code and forgetting to change the name of variables and methods from time to time. I believe that keeping the comments updated would provide to be even less probable.
@@ -31,3 +34,46 @@ Having said that, I have used comments in my code in some areas where i stil bel
 - **Banners** - The book argues that banners are in the bad category of comments, particullary when over used. I found if helpful in my html file when delimiting html templates from the rest of the html code. ![banner comment](.img/bannerComment.png)
 
 In developing the applciation, there has been an avoidance for comenting out code. Unused code has been deleted instead.
+
+## Chapter 5. Formatting
+
+Since the application is not that complex. An aim troughout the application developement has been to keep classes under 200 rows. This has led to a somewhat logical step in app development in breaking up the application's ui and it's logic into different classes. The breakup in different classes led to more code having to be introduced to make those classes communicate with each other but nevertheless, the class length has been keept under 200 rows.
+
+In using the **newspaper methapo** i have placed at the top of each class the private fields of the class followed by the constructor. I believe that this convention tells the story of what the code is about.
+
+Since public methods have **affinity**, those public methods have been placced near each other.
+
+**Vertical openess** has been used to delimit concepts in a way that for me at least makes logic and groups different concept.
+
+For **indentation** and **line length** i've been using prettier wich has been found to be reliable, quick and easy tool to keep my code nicely formated in the way i've setted it up. I've found that keeping the line width at 80 characters alows me to have multiple files in my IDE, side by side which halps me track and update the code in diferent files simultaniousely
+
+![newspaperMethod](.img/formating.png)
+
+## Chapter 6. Objects and Data Structures
+
+The distinction between data structure and object is something that i haven't give that much tought into before reading Clean Code. I've been using hybrids. By using typescript in my project, and converting multiple method arguments into a type, i've created data structures/ transfer objects while the implemented code that use those types are objects.
+
+The law of demeter has been followed by creating instances of the object's wholse methods are needed ![lawOfDemeter](.img/lawOfDemeter.png).
+But i do violate it when handling DOM elmenets trough **train wrecks**.
+
+## Chapter 7. Error Handling
+
+In this project i've tried to use myself of **exceptions** (throw Error in javascript) instead of returning **null** or an arbitrary value that would signal an error. Altrough my current implementation is far from correct or complete i still believe that i learnt how to think about error handling in code.
+
+I've choosen to follow Daniel's solution and use a single file (CustomErrors.ts), where i have different classes. I do realise that this goes against one class per file principle but i argue that the **affinity** of the code makes the code cleaner than having files for each error class.
+
+Code implemented for error handling has been made trough an validator class that throws custom made Error objects. Because of time constraints, further improvement of the error handling has not been focused on but in future developement, one should focus on:
+
+- Adding error traceability to **provide context** of where the error occured.
+- Use try catch statements when handling methods that can throw exceptions.
+- Prvide UI feedback when the user input does not pass the validation
+
+## Chapter 8. Boundaries
+
+Since the requirement of the application is to use a third part module (consent-tracker). That module is interacting with my application trough module's **interface** but i violate the boundary principle by instantiating it in three separate classes instead of creating a ceteralized interface. ![consent-tracker](.img/consentTrackerInstance.png)
+
+![consent-tracker](.img/lawOfDemeter.png)
+
+![consent-tracker](.img/timerConsentTracker.png)
+
+## Chapter 9. Unit Tests
