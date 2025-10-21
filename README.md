@@ -1,8 +1,18 @@
 # Pomodoro
 
-This is a web application that is a simple pomodoro timer. The project is done in part as a school project for the course 1DV610.
+A web-based Pomodoro timer application to help you stay focused and productive. The project is done in part as a school project for the course 1DV610.
 
-The application is deployed trough vercel
+<br>
+
+## What is the Pomodoro Technique?
+
+The Pomodoro Technique is a time management method that uses a timer to break work into focused intervals, traditionally 25 minutes in length, separated by short breaks. These intervals are called "pomodoros". The technique helps maintain concentration and prevents burnout by encouraging regular rest periods.
+
+<br>
+
+## Live Demo
+
+The application is deployed through Vercel. Link available in the "About" section of this repository
 
 <br>
 
