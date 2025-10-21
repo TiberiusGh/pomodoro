@@ -20,7 +20,7 @@ Development of the applciation is divided into minimum viable product (MVP) and 
 
 ### Reflections
 
-Reflections are provided in [reflections.md](docs/reflections.md)
+Reflections are provided in [reflections.md](docs/reflection.md)
 
 <br>
 
