@@ -29,6 +29,7 @@ Acording to Clean Code, the ideal number of arguments in a function is zero **(n
 **Small function that do one thing and do it well** is the aim for function according to Clean Code. Writing a front end application in OOP has provided to be significantly more challenging than anticipated. This lead to my methods not allways following those principles. But according to Robert C. Martin, writing a funtion is like writing a paper where one first get it's thoughts down on paper and later change the wording so it reads well. Focus now for my code should be assigned in refactoring methods so that they become **smaller**, **do one thing**, **take int acount the level of abstraction** and **avoid side effects**.
 
 The method responsable with the countdown in Timer.ts file has nested loops which according to Clean Code is a sign that a method does more than one thing. Refactoring this method had lead me to creating lesser readable code and i've choosen to stick with nested if statements since it's easyer to understand.
+
 ![nestedIf](.img/nestedIf.png)
 
 ## Chapter 4. Comments
@@ -61,7 +62,8 @@ For **indentation** and **line length** i've been using prettier wich has been f
 
 The distinction between data structure and object is something that i haven't give that much tought into before reading Clean Code. I've been using **hybrids**. By using typescript in my project, and converting multiple method arguments into a type, i've created **data structures/ transfer objects** while the implemented code that use those types are objects.
 
-The law of demeter has been followed by creating instances of the object's wholse methods are needed ![lawOfDemeter](.img/lawOfDemeter.png).
+The law of demeter has been followed by creating instances of the object's whose methods are needed ![lawOfDemeter](.img/lawOfDemeter.png)
+
 But i do violate it when handling DOM elmenets trough **train wrecks**.
 
 ## Chapter 7. Error Handling
@@ -82,7 +84,9 @@ Code implemented for error handling has been made trough an validator class that
 
 ## Chapter 8. Boundaries
 
-Since the requirement of the application is to use a third part module (consent-tracker). That module is interacting with my application trough module's **interface** but i violate the boundary principle by instantiating it in three separate classes instead of creating a ceteralized interface. ![consent-tracker](.img/consentTrackerInstance.png)
+Since the requirement of the application is to use a third part module (consent-tracker). That module is interacting with my application trough module's **interface** but i violate the boundary principle by instantiating it in three separate classes instead of creating a ceteralized interface.
+
+![consent-tracker](.img/consentTrackerInstance.png)
 
 ![consent-tracker](.img/lawOfDemeter.png)
 
