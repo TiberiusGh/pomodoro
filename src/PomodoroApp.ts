@@ -5,6 +5,7 @@ import { ConsentView } from './ConsentView'
 
 export class PomodoroApp {
   #htmlContainer
+
   #validator = new Validator()
   #consentTracker = new ConsentTracker()
 
@@ -28,6 +29,7 @@ export class PomodoroApp {
   #renderConsentsView() {
     const consentView = new ConsentView(this.#htmlContainer)
     consentView.renderConsentView()
+    
     this.#mapPomodoroConsentsToConsentTracker(consentView)
   }
 
