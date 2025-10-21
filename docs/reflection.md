@@ -38,7 +38,7 @@ I do agree with Robert C. Martin in that **comments are often lying**. My poor c
 
 Having said that, I have used comments in my code in some areas where i stil believe they are making sense. Some example are:
 
-- **Informative Comment** - Where typescript's intelisense would throw weird error that did not effect the code execution ::TODO:: \*ADD PRINT SCR EXAMPLE
+- **Informative Comment** - Where typescript's intelisense would throw weird error that did not effect the code execution ![informativeComment](.img/informativeComment.png)
 - ** Explanation of intent** - Where calling the method would make the countdown increase it's speed. I realise that explanation of intent has to do with the reader's current knowledge. What's obvious for one developer is not that clear for another ![explanation intent](.img/explanationIntent.png)
 - **Banners** - The book argues that banners are in the bad category of comments, particullary when over used. I found if helpful in my html file when delimiting html templates from the rest of the html code. ![banner comment](.img/bannerComment.png)
 
