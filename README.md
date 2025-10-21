@@ -1,4 +1,4 @@
-# Pomodoro
+# Pomodoro 🍅
 
 A web-based Pomodoro timer application to help you stay focused and productive. The project is done in part as a school project for the course 1DV610.
 
