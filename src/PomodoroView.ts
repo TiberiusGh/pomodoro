@@ -108,6 +108,36 @@ export class PomodoroView {
     this.#decideView()
   }
 
+  #decideView() {
+    const storedMinutes = localStorage.getItem('pomodoro-minutes')
+
+    if (storedMinutes) {
+      this.#showPomodoroView(storedMinutes)
+    } else {
+      this.#showInputView()
+    }
+
+    this.#htmlContainer.appendChild(this.#pomodoroView)
+  }
+
+  #showPomodoroView(storedMinutes: String) {
+    const sessionInput = this.#pomodoroView.querySelector(
+      '#pomodoro-session-input'
+    ) as HTMLElement
+    sessionInput.style.display = 'none'
+
+    this.#startTimer(storedMinutes)
+  }
+
+  #startTimer(minutes: String) {
+    const minutesInNumber = Number(minutes)
+    this.#timer.start(minutesInNumber)
+  }
+
+  #showInputView() {
+    this.#timeAndButtonsDiv.style.display = 'none'
+  }
+
   #decideAdBannerView() {
     const hasMarketingConsent = this.#checkMarketingConsent()
 
@@ -129,6 +159,7 @@ export class PomodoroView {
   #hasMarketingAgreement(consents: any) {
     return consents.marketing
   }
+
   #renderBanner() {
     const bannerHtml = this.#createBanerView()
     this.#validator.validateHtmlElement(bannerHtml)
@@ -143,32 +174,6 @@ export class PomodoroView {
 
     const templateClone = template.content.cloneNode(true) as DocumentFragment
     return templateClone.firstElementChild as HTMLElement
-  }
-
-  #decideView() {
-    const storedMinutes = localStorage.getItem('pomodoro-minutes')
-
-    if (storedMinutes) {
-      this.#showPomodoroView(storedMinutes)
-    } else {
-      this.#showInputView()
-    }
-
-    this.#htmlContainer.appendChild(this.#pomodoroView)
-  }
-
-  #showPomodoroView(storedMinutes: String) {
-    const sessionInput = this.#pomodoroView.querySelector(
-      '#pomodoro-session-input'
-    ) as HTMLElement
-    sessionInput.style.display = 'none'
-
-    const minutes = Number(storedMinutes)
-    this.#timer.start(minutes)
-  }
-
-  #showInputView() {
-    this.#timeAndButtonsDiv.style.display = 'none'
   }
 
   #attachEventListeners() {
