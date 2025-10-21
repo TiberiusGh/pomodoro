@@ -3,10 +3,11 @@ import { Validator } from './Validator'
 
 export class Timer {
   #submitedMinutes: number
-  currentMinutes = 0
+  #currentMinutes = 0
   #currentSeconds = 0
   #timerIntervalID: number | null = null
   #onUpdateCallback: Function
+
   #validator = new Validator()
   #consentTracker = new ConsentTracker()
 
@@ -26,12 +27,12 @@ export class Timer {
 
     this.#submitedMinutes = minutes
 
-    this.currentMinutes = minutes
+    this.#currentMinutes = minutes
 
     this.#handleLocalstorage(minutes)
 
     this.#onUpdateCallback({
-      minutes: this.currentMinutes,
+      minutes: this.#currentMinutes,
       seconds: this.#currentSeconds
     })
 
@@ -41,7 +42,7 @@ export class Timer {
   }
 
   resume() {
-    this.start(this.currentMinutes)
+    this.start(this.#currentMinutes)
   }
 
   pause(): void {
@@ -53,27 +54,28 @@ export class Timer {
 
   reset(): void {
     this.pause()
-    this.currentMinutes = this.#submitedMinutes
+    this.#currentMinutes = this.#submitedMinutes
     this.#currentSeconds = 0
     this.#onUpdateCallback({
-      minutes: this.currentMinutes,
+      minutes: this.#currentMinutes,
       seconds: this.#currentSeconds
     })
   }
 
   #tick(): void {
     if (this.#currentSeconds === 0) {
-      if (this.currentMinutes === 0) {
+      if (this.#currentMinutes === 0) {
         this.pause()
         return
       }
-      this.currentMinutes--
+      this.#currentMinutes--
       this.#currentSeconds = 59
     } else {
       this.#currentSeconds--
     }
+
     this.#onUpdateCallback({
-      minutes: this.currentMinutes,
+      minutes: this.#currentMinutes,
       seconds: this.#currentSeconds
     })
   }
@@ -87,10 +89,12 @@ export class Timer {
   }
 
   #checkLocalstorageAccess() {
-    const userConsents = this.#consentTracker.getConsents()
+    try {
+      const userConsents = this.#consentTracker.getConsents()
 
-    if (userConsents) {
-      return userConsents.essential
+      return userConsents
+    } catch (error) {
+      return false
     }
   }
 }
